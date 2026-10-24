@@ -1,0 +1,20 @@
+{
+  "company": {
+    "name": "VSME Demo Company",
+    "employees": 50
+  },
+  "environmental": {
+    "total_energy_mwh": 120000000000,
+    "ghg_intensity_tco2e_per_million_eur": 113.7,
+    "non_hazardous_waste_recycled_pct": 92.7
+  },
+  "social": {
+    "permanent_contract_pct": 88,
+    "gender_pay_gap_pct": 4.5,
+    "turnover_pct": 12
+  },
+  "governance": {
+    "reporting_controls": 6,
+    "inconsistencies_detected": 2
+  }
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VSME ESG AI Reporting Prototype</title>
+<style>
+:root{--bg:#f5f7f9;--card:#fff;--text:#17212b;--muted:#667381;--line:#dde3e8;--accent:#236b4e;--warn:#9a6410;--danger:#a53b3b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#123d2d;color:white;padding:28px 5vw}header h1{margin:0 0 5px;font-size:28px}header p{margin:0;opacity:.82}
+nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 5vw;background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+nav button,.btn{border:1px solid var(--line);background:white;border-radius:8px;padding:9px 13px;cursor:pointer}
+nav button.active,.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}
+main{max-width:1250px;margin:24px auto;padding:0 20px}.view{display:none}.view.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 2px 8px #10203008}
+.kpi{font-size:25px;font-weight:700}.label{color:var(--muted);font-size:13px}.small{font-size:12px;color:var(--muted)}
+h2{margin:8px 0 14px}h3{margin-top:0}.pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8f3ee;color:var(--accent);font-size:12px;font-weight:600}
+.warn{background:#fff6df;color:var(--warn);padding:10px;border-radius:8px}.danger{background:#fdecec;color:var(--danger);padding:10px;border-radius:8px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--muted);text-transform:uppercase}
+input,select,textarea{width:100%;padding:9px;border:1px solid #cbd4db;border-radius:7px;margin-top:5px}label{display:block;margin:10px 0;font-weight:600}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.progress{height:9px;background:#e7ecef;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:var(--accent)}
+.ai{background:#f1f7f4;border-left:4px solid var(--accent);padding:14px;border-radius:7px}
+.report{font-family:Georgia,serif;background:#fff;padding:28px;border:1px solid var(--line);border-radius:8px}.report h1{font-family:system-ui}
+@media(max-width:850px){.grid,.grid2,.formgrid{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}@media(max-width:560px){.grid,.formgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>AI-Supported ESG Reporting</h1>
+<p>VSME-oriented prototype for very small and medium-sized enterprises</p>
+</header>
+<nav id="nav">
+<button class="active" data-view="dashboard">Dashboard</button>
+<button data-view="data">ESG Data</button>
+<button data-view="validation">AI Validation</button>
+<button data-view="mapping">VSME Mapping</button>
+<button data-view="report">Report Preview</button>
+</nav>
+
+<main>
+<section id="dashboard" class="view active">
+<div class="card"><h2>VSME Demo Company</h2><span class="pill">Prototype</span>
+<p>This dashboard demonstrates automated KPI calculation, validation, disclosure mapping and AI-assisted reporting using the project data supplied in the research abstract.</p></div>
+<div class="grid">
+<div class="card"><div class="label">Employees</div><div class="kpi" id="kEmp">50</div></div>
+<div class="card"><div class="label">Energy consumption</div><div class="kpi" id="kEnergy">120 B MWh</div></div>
+<div class="card"><div class="label">GHG intensity</div><div class="kpi" id="kGHG">113.7</div><div class="small">tCO₂e / €1m turnover</div></div>
+<div class="card"><div class="label">Waste recycled</div><div class="kpi" id="kWaste">92.7%</div></div>
+</div>
+<div class="grid">
+<div class="card"><div class="label">Permanent contracts</div><div class="kpi" id="kPerm">88%</div></div>
+<div class="card"><div class="label">Gender pay gap</div><div class="kpi" id="kGap">4.5%</div></div>
+<div class="card"><div class="label">Turnover</div><div class="kpi" id="kTurnover">12%</div></div>
+<div class="card"><div class="label">Validation status</div><div class="kpi" id="kStatus">Review</div></div>
+</div>
+<div class="grid2">
+<div class="card"><h3>Reporting readiness</h3><p class="small">Illustrative completeness score</p><div class="progress"><div id="readiness" style="width:100%"></div></div><p><b id="readinessText">100%</b> of prototype fields populated.</p></div>
+<div class="card"><h3>AI assistant</h3><div class="ai" id="aiDash">Two potential inconsistencies require human review before final approval.</div></div>
+</div>
+</section>
+
+<section id="data" class="view">
+<div class="card"><h2>ESG Data Input</h2><p class="small">Edit the sample values to test the prototype. Values are recalculated in the browser.</p>
+<div class="formgrid">
+<label>Total energy (MWh)<input id="energy" type="number" value="120000000000"></label>
+<label>GHG intensity (tCO₂e / €1m turnover)<input id="ghg" type="number" step=".1" value="113.7"></label>
+<label>Non-hazardous waste recycled (%)<input id="waste" type="number" step=".1" value="92.7"></label>
+<label>Employees<input id="employees" type="number" value="50"></label>
+<label>Permanent contracts (%)<input id="perm" type="number" step=".1" value="88"></label>
+<label>Gender pay gap (%)<input id="gap" type="number" step=".1" value="4.5"></label>
+<label>Turnover (%)<input id="turnover" type="number" step=".1" value="12"></label>
+<label>Reporting controls<input id="controls" type="number" value="6"></label>
+</div>
+<button class="btn primary" onclick="validate(true)">Run AI validation</button>
+<button class="btn" type="button" onclick="resetData()">Reset sample data</button>
+</div>
+</section>
+
+<section id="validation" class="view">
+<div class="card"><h2>AI Validation & Quality Controls</h2><div id="validationBox"></div></div>
+<div class="card"><h3>Illustrative AI pipeline</h3><table><tr><th>Stage</th><th>Function</th><th>Output</th></tr>
+<tr><td>1. Ingestion</td><td>Read structured records and documents</td><td>Normalized ESG dataset</td></tr>
+<tr><td>2. NLP extraction</td><td>Identify ESG facts in text</td><td>Evidence candidates + source</td></tr>
+<tr><td>3. Validation</td><td>Range, cross-field and consistency checks</td><td>Flags + confidence</td></tr>
+<tr><td>4. Calculation</td><td>Derive normalized indicators</td><td>Auditable KPI values</td></tr>
+<tr><td>5. Narrative</td><td>Draft disclosure language</td><td>Reviewer-ready text</td></tr></table></div>
+</section>
+
+<section id="mapping" class="view">
+<div class="card"><h2>VSME-Oriented Disclosure Mapping</h2><p class="small">Illustrative research prototype mapping; confirm exact requirements against the current EFRAG VSME standard for production use.</p>
+<table><tr><th>Topic</th><th>Prototype data</th><th>Status</th><th>Evidence / control</th></tr>
+<tr><td>Energy & climate</td><td id="mapEnergy"></td><td id="mapEnergyStatus"></td><td>Energy record + calculation check</td></tr>
+<tr><td>Waste</td><td id="mapWaste"></td><td><span class="pill">Populated</span></td><td>Waste register</td></tr>
+<tr><td>Workforce</td><td id="mapWorkforce"></td><td><span class="pill">Populated</span></td><td>HR/payroll</td></tr>
+<tr><td>Pay equity</td><td id="mapPay"></td><td><span class="pill">Populated</span></td><td>Payroll analysis</td></tr>
+<tr><td>Turnover</td><td id="mapTurnover"></td><td><span class="pill">Populated</span></td><td>HR records</td></tr>
+<tr><td>Governance</td><td id="mapControls"></td><td id="mapGovernanceStatus"></td><td>AI control log</td></tr>
+</table></div>
+</section>
+
+<section id="report" class="view">
+<div class="card"><button class="btn primary" onclick="generateReport()">Generate AI-assisted report</button></div>
+<div id="reportOut" class="report"><h1>ESG Disclosure Preview</h1><p>Click “Generate AI-assisted report” to create a draft narrative from the current dataset.</p></div>
+</section>
+</main>
+
+<script>
+const ids=['energy','ghg','waste','employees','perm','gap','turnover','controls'];
+const defaults={energy:'120000000000',ghg:'113.7',waste:'92.7',employees:'50',perm:'88',gap:'4.5',turnover:'12',controls:'6'};
+const $=id=>document.getElementById(id);
+function val(id){const el=$(id);return el.value.trim()===''?NaN:Number(el.value)}
+function fmt(n,d=1){return Number.isFinite(n)?new Intl.NumberFormat(undefined,{maximumFractionDigits:d}).format(n):'Not provided'}
+function validate(navigate=false){
+ const issues=[];
+ ids.forEach(id=>{if(!Number.isFinite(val(id)))issues.push($(id).labels[0].textContent.replace(/\s+/g,' ').trim()+' must contain a number.')});
+ if(Number.isFinite(val('energy'))&&val('energy')<=0)issues.push('Energy consumption must be positive.');
+ if(Number.isFinite(val('ghg'))&&val('ghg')<0)issues.push('GHG intensity cannot be negative.');
+ ['waste','perm','gap','turnover'].forEach(id=>{if(Number.isFinite(val(id))&&(val(id)<0||val(id)>100))issues.push($(id).labels[0].textContent.split('(')[0].trim()+' must be between 0 and 100%.')});
+ if(Number.isFinite(val('employees'))&&(val('employees')<1||!Number.isInteger(val('employees'))))issues.push('Employee count must be a positive whole number.');
+ if(Number.isFinite(val('controls'))&&(val('controls')<0||!Number.isInteger(val('controls'))))issues.push('Reporting controls must be a non-negative whole number.');
+ if(Number.isFinite(val('energy'))&&val('energy')>1000000000)issues.push('Energy value is unusually large; check the source unit and figure.');
+ const html=issues.length?'<div class="warn"><b>Validation flags:</b><ul>'+issues.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>':'<div class="ai"><b>No basic validation errors detected.</b> Cross-check source evidence and obtain reviewer approval before final reporting.</div>';
+ $('validationBox').innerHTML=html+'<h3>Control score</h3><div class="progress"><div style="width:'+Math.max(0,100-issues.length*12)+'%"></div></div><p class="small">'+(issues.length?'Review needed':'Basic field checks passed')+'. Automated checks do not approve disclosures.</p>';
+ $('kStatus').textContent=issues.length?'Review':'Pass';$('aiDash').textContent=issues.length?issues.length+' validation flag(s) require human review.':'Basic checks passed; source evidence still requires human review.';
+ $('kEmp').textContent=fmt(val('employees'),0);$('kEnergy').textContent=fmt(val('energy'))+' MWh';$('kGHG').textContent=fmt(val('ghg'));$('kWaste').textContent=fmt(val('waste'))+'%';
+ $('kPerm').textContent=fmt(val('perm'))+'%';$('kGap').textContent=fmt(val('gap'))+'%';$('kTurnover').textContent=fmt(val('turnover'))+'%';
+ const complete=ids.filter(id=>Number.isFinite(val(id))).length/ids.length*100;$('readiness').style.width=complete+'%';$('readinessText').textContent=Math.round(complete)+'%';
+ $('mapEnergy').textContent=fmt(val('energy'))+' MWh; GHG intensity '+fmt(val('ghg'));
+ $('mapEnergyStatus').innerHTML=issues.some(x=>x.includes('Energy'))?'<span class="warn">Review</span>':'<span class="pill">Populated</span>';
+ $('mapWaste').textContent=fmt(val('waste'))+'% non-hazardous waste recycled';$('mapWorkforce').textContent=fmt(val('employees'),0)+' employees; '+fmt(val('perm'))+'% permanent';$('mapPay').textContent=fmt(val('gap'))+'% gender pay gap';$('mapTurnover').textContent=fmt(val('turnover'))+'%';$('mapControls').textContent=fmt(val('controls'),0)+' reporting controls';$('mapGovernanceStatus').innerHTML=issues.length?'<span class="warn">Review</span>':'<span class="pill">Populated</span>';
+ if(navigate)show('validation');return issues;
+}
+function save(){try{localStorage.setItem('vsme-esg-data',JSON.stringify(Object.fromEntries(ids.map(id=>[id,$(id).value]))))}catch(e){}validate(false)}
+function resetData(){ids.forEach(id=>$(id).value=defaults[id]);try{localStorage.removeItem('vsme-esg-data')}catch(e){}validate(false)}
+function generateReport(){
+ const issues=validate(false);
+ const report=$('reportOut');report.replaceChildren();
+ const add=(tag,text)=>{const el=document.createElement(tag);el.textContent=text;report.appendChild(el)};
+ add('h1','ESG Disclosure Preview');add('p','VSME Demo Company reports a workforce of '+fmt(val('employees'),0)+' employees. '+fmt(val('perm'))+'% are employed under permanent contracts, with a gender pay gap of '+fmt(val('gap'))+'% and an employee turnover rate of '+fmt(val('turnover'))+'%.');
+ add('h2','Environmental performance');add('p','Total energy consumption is reported at '+fmt(val('energy'))+' MWh. GHG intensity is '+fmt(val('ghg'))+' tCO₂e per €1 million of turnover. Non-hazardous waste recycling is '+fmt(val('waste'))+'%.');
+ add('h2','Governance & controls');add('p','The dataset includes '+fmt(val('controls'),0)+' reporting controls. '+(issues.length?'Validation flagged '+issues.length+' item(s) for human review.':'Basic field checks found no issues.'));
+ const notice=document.createElement('div');notice.className=issues.length?'warn':'ai';notice.textContent='Draft for review: check factual accuracy, source evidence, calculation logic and applicability to the current EFRAG VSME requirements before publication.';report.appendChild(notice);
+}
+function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===id))}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+ids.forEach(id=>$(id).addEventListener('input',save));
+try{const saved=JSON.parse(localStorage.getItem('vsme-esg-data')||'null');if(saved)ids.forEach(id=>{if(typeof saved[id]==='string')$(id).value=saved[id]})}catch(e){}
+validate(false);
+</script>
+</body></html>
